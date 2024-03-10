@@ -12,6 +12,6 @@ class Eval:
         except:
             result = traceback.format_exc()
 
-        msg.sendMessage(result, parse_mode = "MarkdownV2")
+        msg.sendMessage(result)
 
 plugins.init_plugin(Eval)

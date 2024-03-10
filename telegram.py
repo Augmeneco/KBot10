@@ -157,6 +157,7 @@ class Telegram:
 
     def sendMessage(self, text: str, chat_id: int, reply_id: int, attachments: list, **parameters):
         parameters['chat_id'] = chat_id
+
         if text == '': text = ' '
         parameters['text'] = text
 

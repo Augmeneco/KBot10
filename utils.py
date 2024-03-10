@@ -49,8 +49,10 @@ class Msg:
         result = telegram.sendAudio(self.chat_id, self.msg_id, data, **parameters)
         return result
     
-    def sendMessage(self, text, **parameters):
-        result = telegram.sendMessage(text, self.chat_id, self.msg_id, self.attachments, **parameters)
+    def sendMessage(self, text, chat_id = None, **parameters):
+        #chat_id = self.chat_id if 'chat_id' not in parameters else parameters['chat_id']
+        if chat_id == None: chat_id = self.chat_id
+        result = telegram.sendMessage(text, chat_id, self.msg_id, self.attachments, **parameters)
         return result
 
     def parse_msg(self, update: dict):
