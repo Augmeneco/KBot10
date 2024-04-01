@@ -8,10 +8,9 @@ class Eval:
 
     def execute(self, msg):
         try:
-            result = eval(msg.user_text)
+            exec(msg.user_text)
         except:
             result = traceback.format_exc()
-
-        msg.sendMessage(result)
+            msg.sendMessage(result)
 
 plugins.init_plugin(Eval)

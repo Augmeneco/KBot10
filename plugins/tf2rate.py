@@ -33,8 +33,8 @@ class TF2Rate:
         out =  f'Курс стима 1$ = {usd_rate_steam}₽\n\n'
 
         out += f'1 ключ в стиме: {key_cost_steam}₽\n'
-        out += f'1 ключ на тф2лавке: {key_cost_lavka}₽ | {round((key_cost_steam/key_cost_lavka-1)*100, 2)}% выгоды\n'
-        out += f'Цена ключа после продажи в стиме: {round(key_cost_steam/1.15, 2)}₽\n\n'
+        out += f'1 ключ на тф2лавке: {key_cost_lavka}₽\n'
+        out += f'Цена ключа после продажи в стиме: {round(key_cost_steam/1.15, 2)}₽ | {round(((key_cost_steam/1.15)/key_cost_lavka-1)*100, 2)}% выгоды\n\n'
 
         ar_key_cost_steam = requests.get('https://steamcommunity.com/market/priceoverview/?country=AR&currency=1&appid=440&market_hash_name=Mann%20Co.%20Supply%20Crate%20Key').json()['lowest_price']
         ar_key_cost_steam = float(ar_key_cost_steam.replace('$', '').replace(' USD', ''))

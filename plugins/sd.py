@@ -51,14 +51,14 @@ class StableDiffusion:
             text = GoogleTranslator(source='auto', target='en').translate(text=msg.user_text)
 
             params = {
-                'prompt': f'(high quality, masterpiece), {text}',
-                'negative_prompt': 'easynegative, notxt',
+                'prompt': f'score_9, score_8_up, score_7_up, score_6_up, score_5_up, score_4_up, {text}',
+                'negative_prompt': '3d',
                 'seed': -1,
                 'sampler_name': 'Euler a', #'DPM++ 2M SDE Karras',
-                "steps": 20,
-                "cfg_scale": 5,
-                "width": 512,
-                "height": 768,
+                "steps": 25,
+                "cfg_scale": 7,
+                "width": 836,
+                "height": 1254,
             }
 
             if msg.attachments:
@@ -67,14 +67,14 @@ class StableDiffusion:
                 ))
                 width, height = image.size
 
-                if width > 512 or height > 512:
+                if width > 836 or height > 836:
                     scaler = width / height
                     if scaler > 1:
-                        params['width'] = 512
-                        params['height'] = int(512 / scaler)
+                        params['width'] = 836
+                        params['height'] = int(836 / scaler)
                     else:
-                        params['width'] = int(512 * scaler)
-                        params['height'] = 512
+                        params['width'] = int(836 * scaler)
+                        params['height'] = 836
                 
                 image.close()
 
