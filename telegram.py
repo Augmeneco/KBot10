@@ -63,7 +63,8 @@ class Telegram:
     def getUpdates(self):
         result = requests.post(
             'https://api.telegram.org/'+self.token+'/getUpdates',
-            data = {'offset':self.update_id}
+            data = {'offset':self.update_id},
+            timeout=30
         ).json()['result']
 
         for update in result:

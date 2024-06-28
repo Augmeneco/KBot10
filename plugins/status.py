@@ -15,10 +15,11 @@ class Status:
 
 		for idx, cpu in enumerate(psutil.cpu_percent(interval=1, percpu=True)):
 			if counter == 1:
-				text += '&#8195;&#8195;Ядро №'+str(idx+1)+': '+str(round(cpu,1))+'%'
+				text += '&#8195;&#8195;№'+str(idx+1)+': '+str(round(cpu,1))+'%'
 				counter = 2
 			elif counter == 2:
-				text += ' | Ядро №'+str(idx+1)+': '+str(round(cpu,1))+'%\n'
+				if len(str(idx+1)) < 3: text += ' '
+				text += ' | №'+str(idx+1)+': '+str(round(cpu,1))+'%\n'
 				counter = 1
 
 		mem = psutil.virtual_memory()
@@ -31,7 +32,7 @@ class Status:
 
 		if os.path.exists('/usr/bin/nvidia-smi'):
 			vram = subprocess.run('nvidia-smi', shell=True, capture_output=True).stdout.decode()
-			vram = re.findall('W\s\/\s.+?W.+?(\d+).+?(\d+)', vram)[0]
+			vram = re.findall('W\s.+?(\d+).+?(\d+)', vram)[0]
 
 			text += f'&#8195;Видеопамять:\n&#8195;&#8195;Всего: {vram[1]} MB\n'
 			text += f'&#8195;&#8195;Использовано: {vram[0]} MB\n'

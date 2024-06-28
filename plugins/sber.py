@@ -82,7 +82,7 @@ class Sber:
             'Authorization': f'Basic {self.auth_code}'
         }
 
-        response = requests.request("POST", url, headers=headers, data=payload).json()
+        response = requests.request("POST", url, headers=headers, data=payload, verify='data/russian_trusted_root_ca_pem.crt').json()
         self.token = response['access_token']
 
     def execute(self, msg):
@@ -116,7 +116,7 @@ class Sber:
             'Authorization': f'Bearer {self.token}'
         }
 
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request("POST", url, headers=headers, data=payload, verify='data/russian_trusted_root_ca_pem.crt')
 
         if 'choices' in response.json():
             response = response.json()

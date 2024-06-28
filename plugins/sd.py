@@ -25,7 +25,7 @@ class StableDiffusion:
     def execute(self, msg):
         try:
             start_time = time.time()
-            url = 'http://127.0.0.1:7860'
+            url = 'http://cha14ka.augmeneco.ru:7866'
 
             loras_add = ''
             lora_tags = re.findall('(?:\w+?:\d.\d)|(?:\w+:\d)|(?:\w+,)|(?:\w+)', msg.user_text)
@@ -50,9 +50,9 @@ class StableDiffusion:
 
             text = GoogleTranslator(source='auto', target='en').translate(text=msg.user_text)
 
-            params = {
+            paramsPony = {
                 'prompt': f'score_9, score_8_up, score_7_up, score_6_up, score_5_up, score_4_up, {text}',
-                'negative_prompt': '3d',
+                'negative_prompt': '3d, monochrome',
                 'seed': -1,
                 'sampler_name': 'Euler a', #'DPM++ 2M SDE Karras',
                 "steps": 25,
@@ -60,6 +60,30 @@ class StableDiffusion:
                 "width": 836,
                 "height": 1254,
             }
+
+            params15 = {
+                'prompt': f'(high quality, masterpiece), {text}',
+                'negative_prompt': 'easynegative, notxt',
+                'seed': -1,
+                'sampler_name': 'Euler a', #'DPM++ 2M SDE Karras',
+                "steps": 20,
+                "cfg_scale": 5,
+                "width": 512,
+                "height": 768,
+            }
+
+            paramsSDXL = {
+                'prompt': f'(high quality, masterpiece), {text}',
+                'negative_prompt': 'easynegative',
+                'seed': -1,
+                'sampler_name': 'Euler a', #'DPM++ 2M SDE Karras',
+                "steps": 25,
+                "cfg_scale": 7,
+                "width": 1536,
+                "height": 1024,
+            }
+
+            params = paramsPony
 
             if msg.attachments:
                 image = Image.open(BytesIO(

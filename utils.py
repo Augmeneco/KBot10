@@ -104,7 +104,7 @@ class Msg:
         self.has_prefix = True
         
         argv = []
-        argv = self.is_cmd_regex.sub('', self.text).split(' ')
+        argv = self.is_cmd_regex.sub('', self.text).split()
         command = argv[0].lower()
 
         if command not in plugin.plugins_map:

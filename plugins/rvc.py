@@ -11,10 +11,12 @@ class RVCAudioVoice:
 
     pitch = {
         'путин':2,
-        'солдат':2,
+        'мишенконтрол':2,
         'некоарк':10,
         'зеля':0,
-        'пригожин': 0
+        'пригожин': 0,
+        'гриффин': 2,
+        'эрнест': 3
     }
 
     def get_argv(self, msg, name):
@@ -38,8 +40,8 @@ class RVCAudioVoice:
         except:
             msg.sendMessage("Сервер RVC выключен")
             return
-        
-        voices = [i.replace('.pth', '') for i in client.predict(api_name="/infer_refresh")[0]['choices']]
+
+        voices = [i[0].replace('.pth', '') for i in client.predict(api_name="/infer_refresh")[0]['choices']]
 
         if msg.argv[0] == 'помощь': 
             result = client.predict(api_name="/infer_refresh")
@@ -72,7 +74,7 @@ class RVCAudioVoice:
         id = msg.msg_id
         
         tts = subprocess.Popen([
-            '/home/cha14ka/prog/SDBot/venv/bin/edge-tts',
+            'edge-tts',
             '--text',
             ' '.join(msg.argv),
             '--voice',
@@ -102,11 +104,11 @@ class RVCAudioVoice:
             0,	# int | float (numeric value between 0 and 0.5) in 'Защитить глухие согласные и звуки дыхания для предотвращения артефактов, например, разрывания в электронной музыке. Поставьте на 0.5, чтобы выключить. Уменьшите значение для повышения защиты, но учтите, что при этом может ухудшиться точность индексирования:' Slider component
             api_name="/infer_convert"
         )
-        msg.sendAudio(open(result[1], 'rb').read(), name = voice.replace('.pth',''))
+        msg.sendAudio(open(result[1], 'rb').read(), name = voice.replace('.pth','')+'.wav')
 
 
 class RVCAudioRemover:
-    names = ['аудио']
+    names = ['раздели', 'аудио']
     desc = 'Ответьте на аудио сообщение чтобы разделить на слова и музыку'
     level = 1
 
@@ -143,11 +145,19 @@ class RVCAudioRemover:
             "mp3",	# str  in 'Формат выходных файлов' Radio component
             api_name="/uvr_convert"
         )
-        vocal = open(f'/tmp/vocal_{msg.msg_id}_remover.wav_0.mp3', 'rb').read()
-        instrument = open(f'/tmp/instrument_{msg.msg_id}_remover.wav_0.mp3', 'rb').read()
-        os.system(f'rm /tmp/instrument_{msg.msg_id}_remover.wav_0.mp3')
-        os.system(f'rm /tmp/vocal_{msg.msg_id}_remover.wav_0.mp3')
-        os.system(f'rm /tmp/{msg.msg_id}_remover.wav')
+
+        vocal = '/tmp/'+subprocess.run(f'ls /tmp/ | grep "vocal_{msg.msg_id}"', shell=True, capture_output=True).stdout.decode().replace("\n","")
+        vocal = open(vocal, 'rb').read()
+
+        instrument = '/tmp/'+subprocess.run(f'ls /tmp/ | grep "instrument_{msg.msg_id}"', shell=True, capture_output=True).stdout.decode().replace("\n","")
+        instrument = open(instrument, 'rb').read()
+
+        #os.system(f'rm /tmp/instrument_{msg.msg_id}_remover.wav_0.mp3')
+        #os.system(f'rm /tmp/vocal_{msg.msg_id}_remover.wav_0.mp3')
+        #os.system(f'rm /tmp/{msg.msg_id}_remover.wav')
+
+        for f in subprocess.run('ls /tmp/ | grep "149483"', shell=True, capture_output=True).stdout.decode().split("\n")[:-1]:
+            os.system(f'rm /tmp/{f}')
 
         msg.sendAudio(vocal, name = f'[vocal] {attach["file_name"]}')
         msg.sendAudio(instrument, name = f'[instrument] {attach["file_name"]}')
